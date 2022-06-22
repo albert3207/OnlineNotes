@@ -23,7 +23,7 @@ const checkuserlogin = async (req, res) => {
     const accesstoken = jwt.sign(
       { username: req.body.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "60s" }
+      { expiresIn: "1h" }
     );
     const refreshtoken = jwt.sign(
       { username: req.body.username },
@@ -34,15 +34,18 @@ const checkuserlogin = async (req, res) => {
     // const id = userwithusername._id.toString();
     //check if the user enetered passwoed matches with the DB password
     if (bcrypt.compareSync(req.body.password, userwithusername.password)) {
-      //if matches - send the user thir nots        -----------------------------               //TODO
-      // const user = await User.findById(id);
+      //if matches - send the user their notes        -----------------------------               //TODO
+
+      //sending all user notes  back to the user once they login
+      const getallusernotes = await Note.find({ username: req.username });
       res.cookie("jwt", refreshtoken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
+
       return res.json({
         message: "you are now in ",
-        user: userwithusername,
+        user: getallusernotes,
         accesstoken,
       });
     }

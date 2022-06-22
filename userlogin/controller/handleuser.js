@@ -1,4 +1,5 @@
 const { User } = require("../model/UserModel");
+const { Note } = require("../model/Notesmodel");
 const bcrypt = require("bcrypt");
 
 // 1) import JWT package
@@ -42,7 +43,7 @@ const createuser = async (req, res) => {
     const Accesstoken = jwt.sign(
       { username: req.body.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "60s" }
+      { expiresIn: "1h" }
     );
     const Refreshtoken = jwt.sign(
       { username: req.body.username },
@@ -104,6 +105,7 @@ const deleteuser = async (req, res) => {
 
 const deleteall = async (req, res) => {
   try {
+    const deleteallnotes = await Note.remove({});
     const deleteone = await User.remove({});
     return res.send(deleteone);
   } catch (error) {

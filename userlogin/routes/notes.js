@@ -6,14 +6,22 @@ const {
   getallnotes,
   deletenote,
   updateanote,
-  deleteall,
+  deletemany,
 } = require("../controller/handlenotes");
 const verifyJWT = require("../middleware/verifyJWT");
 
 const router = express.Router();
 
-router.route("/:id").get(getasinglenote).delete(deletenote).patch(updateanote);
+router
+  .route(":id")
+  .get(verifyJWT, getasinglenote)
+  .delete(verifyJWT, deletenote)
+  .patch(verifyJWT, updateanote);
 
-router.route("/").post(createnotes).get(getallnotes);
+router
+  .route("")
+  .post(verifyJWT, createnotes)
+  .delete(verifyJWT, deletemany)
+  .get(verifyJWT, getallnotes);
 
 module.exports = router;

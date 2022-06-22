@@ -5,8 +5,6 @@ const verifyJWT = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.send("unauthorized");
 
-  console.log(authHeader);
-
   // 2) get token from the authHeader  (this token is placed by frontend so that we can identoify who the user is)
   const token = authHeader.split(" ")[1];
 

@@ -6,7 +6,7 @@ const {
   getasingleuser,
   deleteuser,
   deleteall,
-} = require("../controller/handleuserlogin");
+} = require("../controller/handleuser");
 
 const { checkuserlogin } = require("../controller/logincontroller");
 
@@ -15,14 +15,14 @@ const { ROLE } = require("../model/UserModel");
 
 const router = express.Router();
 
-router.route("/").post(createuser).get(getallusers).delete(deleteall);
+router.route("").post(createuser).get(getallusers).delete(deleteall);
 
 router
-  .route("/:id")
+  .route(":id")
   .patch(changepassword)
   .get(getasingleuser)
   .delete(deleteuser);
 
-router.route("/login").post(checkuserlogin);
+router.route("login").post(checkuserlogin);
 
 module.exports = router;
