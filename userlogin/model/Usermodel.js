@@ -1,12 +1,19 @@
 const mongoose = require("mongoose");
 
+ROLE = {
+  USER: "USER",
+  ADMIN: "ADMIN",
+};
+
 const { Schema } = mongoose;
 
-const noteSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
+//creating user in db with uername and password protpery
+const userSchema = new Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+  role: { type: String, default: "USER" },
 });
 
-const Note = mongoose.model("Note", noteSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = Note;
+module.exports = { User, ROLE };

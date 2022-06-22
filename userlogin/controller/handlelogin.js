@@ -1,4 +1,4 @@
-const Note = require("../model/Usermodel");
+const Note = require("../model/Notesmodel");
 
 const getallnotes = async (req, res) => {
   const allnotes = await Note.find();

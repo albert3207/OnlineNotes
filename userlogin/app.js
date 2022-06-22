@@ -1,12 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const router = require("./routes/user");
+const notes = require("./routes/notes");
+const users = require("./routes/users");
+
 const app = express();
 
 app.use(express.json());
 
-app.use("/", router);
+app.use("/", users);
+app.use("/notes", notes);
 
 mongoose.connect(process.env.MONGODB_URI);
 
