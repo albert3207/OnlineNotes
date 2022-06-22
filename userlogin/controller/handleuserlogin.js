@@ -1,4 +1,5 @@
 const { User } = require("../model/UserModel");
+const bcrypt = require("bcrypt");
 
 const getallusers = async (req, res) => {
   try {
@@ -22,19 +23,19 @@ const createuser = async (req, res) => {
   if (!req.body.username || !req.body.password) {
     return res.send("please provide both password and username");
   }
+  const hash = await bcrypt.hashSync(req.body.password, 10);
 
   try {
     const userindb = await User.findOne({
       username: req.body.username,
     });
-    console.log(userindb);
 
     if (userindb) {
       return res.send("user already exist");
     }
     const createduser = await User.create({
       username: req.body.username,
-      password: req.body.password,
+      password: hash,
     });
     return res.json({ createduser });
   } catch (error) {
@@ -53,7 +54,8 @@ const changepassword = async (req, res) => {
     if (!olduser) {
       return res.sendStatus(400);
     }
-    return res.send("chnage pswed");
+    const user = await User.findById(req.params.id);
+    return res.json({ message: "chnage pswed", user: user });
   } catch (error) {
     return res.json({ message: error.message });
   }
