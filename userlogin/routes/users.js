@@ -15,11 +15,7 @@ const { ROLE } = require("../model/UserModel");
 
 const router = express.Router();
 
-router
-  .route("/")
-  .post(createuser)
-  .get(rolecheck(ROLE.ADMIN), getallusers)
-  .delete(deleteall);
+router.route("/").post(createuser).get(getallusers).delete(deleteall);
 
 router
   .route("/:id")

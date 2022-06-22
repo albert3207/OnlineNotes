@@ -1,6 +1,7 @@
 const { User } = require("../model/UserModel");
 const { Note } = require("../model/Notesmodel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const checkuserlogin = async (req, res) => {
   //1) check if the user entered username and password both
@@ -19,13 +20,31 @@ const checkuserlogin = async (req, res) => {
       return res.send("no user found, please sign up");
     }
 
+    const accesstoken = jwt.sign(
+      { username: req.body.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "60s" }
+    );
+    const refreshtoken = jwt.sign(
+      { username: req.body.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1d" }
+    );
+
     // const id = userwithusername._id.toString();
     //check if the user enetered passwoed matches with the DB password
     if (bcrypt.compareSync(req.body.password, userwithusername.password)) {
       //if matches - send the user thir nots        -----------------------------               //TODO
       // const user = await User.findById(id);
-
-      return res.json({ message: "you are now in ", user: userwithusername });
+      res.cookie("jwt", refreshtoken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      return res.json({
+        message: "you are now in ",
+        user: userwithusername,
+        accesstoken,
+      });
     }
 
     //if password do not match

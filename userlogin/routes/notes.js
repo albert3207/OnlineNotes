@@ -1,17 +1,19 @@
 const express = require("express");
 
 const {
-  getallnotes,
   createnotes,
   getasinglenote,
+  getallnotes,
   deletenote,
   updateanote,
-} = require("../controller/handlelogin");
+  deleteall,
+} = require("../controller/handlenotes");
+const verifyJWT = require("../middleware/verifyJWT");
 
 const router = express.Router();
 
-router.route("/").get(getallnotes).post(createnotes);
-
 router.route("/:id").get(getasinglenote).delete(deletenote).patch(updateanote);
+
+router.route("/").post(createnotes).get(getallnotes);
 
 module.exports = router;

@@ -1,9 +1,11 @@
 const rolecheck = (ROLES) => {
   return (req, res, next) => {
     if (ROLES == "ADMIN") {
+      console.log("authorized");
       next();
     }
-    return res.send("not authorized");
+    res.send("not authorized");
+    // next();
   };
 };
 
